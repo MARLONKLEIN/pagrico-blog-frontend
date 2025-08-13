@@ -31,10 +31,10 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold mb-4">PagRico</h3>
             <ul className="space-y-2 text-gray-300">
-              <li><Link href="https://pagrico.com" className="hover:text-white transition-colors">Home</Link></li>
-              <li><Link href="https://pagrico.com#services" className="hover:text-white transition-colors">Serviços</Link></li>
-              <li><Link href="https://pagrico.com#pricing" className="hover:text-white transition-colors">Preços</Link></li>
-              <li><Link href="https://pagrico.com/contato" className="hover:text-white transition-colors">Contato</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
+              <li><Link href="/#services" className="hover:text-white transition-colors">Serviços</Link></li>
+              <li><Link href="/#pricing" className="hover:text-white transition-colors">Preços</Link></li>
+              <li><Link href="/contato" className="hover:text-white transition-colors">Contato</Link></li>
             </ul>
           </div>
         </div>

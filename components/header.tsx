@@ -9,7 +9,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link
-              href="https://pagrico.com"
+              href="/"
               className="flex items-center gap-3 text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
             >
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
@@ -20,7 +20,7 @@ export default function Header() {
           </div>
           <nav className="hidden md:flex items-center space-x-8">
             <Link
-              href="https://pagrico.com"
+              href="/"
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
               Home
@@ -32,13 +32,13 @@ export default function Header() {
               Blog
             </Link>
             <Link
-              href="https://pagrico.com#services"
+              href="/#services"
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
               Serviços
             </Link>
             <Link
-              href="https://pagrico.com#pricing"
+              href="/#pricing"
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
               Preços
@@ -46,7 +46,7 @@ export default function Header() {
           </nav>
           <div className="hidden md:block">
             <Link
-              href="https://pagrico.com"
+              href="/"
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
               Acessar Plataforma

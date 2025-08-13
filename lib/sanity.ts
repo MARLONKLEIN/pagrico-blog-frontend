@@ -1,21 +1,9 @@
-import { createClient } from '@sanity/client'
+// lib/sanity.ts
+
+import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
-import { PortableTextBlock } from '@portabletext/types'
 
-// Configuração do cliente Sanity
-export const client = createClient({
-  projectId: '32ysp5d7',
-  dataset: 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false, // Para desenvolvimento local
-})
-
-// Builder para URLs de imagens
-const builder = imageUrlBuilder(client)
-
-export const urlFor = (source: any) => builder.image(source)
-
-// Tipos TypeScript para nossos dados
+// Tipos TypeScript
 export interface Post {
   _id: string
   title: string
@@ -23,183 +11,58 @@ export interface Post {
     current: string
   }
   excerpt: string
-  mainImage: {
-    asset: {
-      _ref: string
-      _type: 'reference'
-    }
-    alt: string
-    caption?: string
-  }
-  body: PortableTextBlock[]
-  author: Author
-  categories: Category[]
-  tags?: string[]
   publishedAt: string
-  readingTime?: number
-  featured: boolean
-  status: 'draft' | 'review' | 'published' | 'archived'
-  seoTitle?: string
-  metaDescription: string
-  focusKeyword: string
-  keywords?: string[]
-}
-
-export interface Author {
-  _id: string
-  name: string
-  slug: {
-    current: string
-  }
-  role: string
-  image: {
+  mainImage?: {
     asset: {
-      _ref: string
-      _type: 'reference'
+      _id: string
+      url: string
     }
-    alt: string
+    alt?: string
   }
-  bio: string
-  expertise: string[]
-  active: boolean
-  featured: boolean
+  author?: {
+    name: string
+  }
+  categories?: Array<{
+    title: string
+  }>
 }
 
-export interface Category {
-  _id: string
-  title: string
-  slug: {
-    current: string
-  }
-  description: string
-  color: string
-  icon: string
-  featured: boolean
-}
+export const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  apiVersion: '2024-01-01',
+  useCdn: true,
+})
 
-// GROQ Queries otimizadas
-export const POSTS_QUERY = `
-  *[_type == "post" && status == "published"] | order(publishedAt desc) {
-    _id,
-    title,
-    slug,
-    excerpt,
-    mainImage {
-      asset,
-      alt,
-      caption
-    },
-    author-> {
-      name,
-      role,
-      image {
-        asset,
-        alt
-      }
-    },
-    categories[]-> {
-      title,
-      slug,
-      color,
-      icon
-    },
-    publishedAt,
-    readingTime,
-    featured,
-    metaDescription,
-    focusKeyword
-  }
-`
+// Builder para URLs de imagens
+const builder = imageUrlBuilder(client)
+export const urlFor = (source: any) => builder.image(source)
 
-export const POST_BY_SLUG_QUERY = `
-  *[_type == "post" && slug.current == $slug && status == "published"][0] {
-    _id,
-    title,
-    slug,
-    excerpt,
-    mainImage {
-      asset,
-      alt,
-      caption
-    },
-    body,
-    author-> {
-      name,
-      role,
-      slug,
-      image {
-        asset,
-        alt
-      },
-      bio,
-      expertise,
-      socialLinks
-    },
-    categories[]-> {
-      title,
-      slug,
-      description,
-      color,
-      icon
-    },
-    tags,
-    publishedAt,
-    readingTime,
-    featured,
-    seoTitle,
-    metaDescription,
-    focusKeyword,
-    keywords,
-    relatedPosts[]-> {
+// Função para buscar todos os posts
+export async function getAllPosts(): Promise<Post[]> {
+  try {
+    const query = `*[_type == "post" && status == "published"] | order(publishedAt desc) {
+      _id,
       title,
       slug,
       excerpt,
+      publishedAt,
       mainImage {
-        asset,
+        asset->{
+          _id,
+          url
+        },
         alt
       },
-      publishedAt,
-      readingTime
-    }
-  }
-`
-
-export const POST_SLUGS_QUERY = `
-  *[_type == "post" && status == "published"] {
-    slug {
-      current
-    }
-  }
-`
-
-export const FEATURED_POSTS_QUERY = `
-  *[_type == "post" && status == "published" && featured == true] | order(publishedAt desc) [0...3] {
-    _id,
-    title,
-    slug,
-    excerpt,
-    mainImage {
-      asset,
-      alt
-    },
-    author-> {
-      name,
-      role
-    },
-    categories[]-> {
-      title,
-      color,
-      icon
-    },
-    publishedAt,
-    readingTime
-  }
-`
-
-// Funções para buscar dados
-export async function getAllPosts(): Promise<Post[]> {
-  try {
-    const posts = await client.fetch(POSTS_QUERY)
+      author->{
+        name,
+      },
+      categories[]->{
+        title
+      }
+    }`
+    
+    const posts = await client.fetch(query)
     return posts || []
   } catch (error) {
     console.error('Erro ao buscar posts:', error)
@@ -207,9 +70,31 @@ export async function getAllPosts(): Promise<Post[]> {
   }
 }
 
+// Função para buscar post por slug
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
-    const post = await client.fetch(POST_BY_SLUG_QUERY, { slug })
+    const query = `*[_type == "post" && slug.current == $slug && status == "published"][0] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      publishedAt,
+      mainImage {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      author->{
+        name,
+      },
+      categories[]->{
+        title
+      }
+    }`
+    
+    const post = await client.fetch(query, { slug })
     return post || null
   } catch (error) {
     console.error('Erro ao buscar post por slug:', error)
@@ -217,64 +102,34 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   }
 }
 
+// Função para buscar posts em destaque
 export async function getFeaturedPosts(): Promise<Post[]> {
   try {
-    const posts = await client.fetch(FEATURED_POSTS_QUERY)
+    const query = `*[_type == "post" && status == "published" && featured == true] | order(publishedAt desc) [0...3] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      publishedAt,
+      mainImage {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      author->{
+        name,
+      },
+      categories[]->{
+        title
+      }
+    }`
+    
+    const posts = await client.fetch(query)
     return posts || []
   } catch (error) {
     console.error('Erro ao buscar posts em destaque:', error)
-    return []
-  }
-}
-
-export async function getAllPostSlugs(): Promise<{ slug: { current: string } }[]> {
-  try {
-    const slugs = await client.fetch(POST_SLUGS_QUERY)
-    return slugs || []
-  } catch (error) {
-    console.error('Erro ao buscar slugs dos posts:', error)
-    return []
-  }
-}
-
-export async function getPostsByCategory(categorySlug: string): Promise<Post[]> {
-  try {
-    const query = `
-      *[_type == "post" && status == "published" && $categorySlug in categories[]->slug.current] | order(publishedAt desc) {
-        _id,
-        title,
-        slug,
-        excerpt,
-        mainImage {
-          asset,
-          alt,
-          caption
-        },
-        author-> {
-          name,
-          role,
-          image {
-            asset,
-            alt
-          }
-        },
-        categories[]-> {
-          title,
-          slug,
-          color,
-          icon
-        },
-        publishedAt,
-        readingTime,
-        featured,
-        metaDescription,
-        focusKeyword
-      }
-    `
-    const posts = await client.fetch(query, { categorySlug })
-    return posts || []
-  } catch (error) {
-    console.error('Erro ao buscar posts por categoria:', error)
     return []
   }
 }

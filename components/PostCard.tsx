@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Post } from '@/lib/types'
+import { Post } from '@/lib/sanity'
 
 interface PostCardProps {
   post: Post
@@ -15,7 +15,7 @@ export default function PostCard({ post }: PostCardProps) {
         <Image
           className="h-48 w-full object-cover"
           src={post.mainImage.asset.url}
-          alt={post.title || 'Imagem do Post'}
+          alt={post.mainImage.alt || post.title || 'Imagem do Post'}
           width={500}
           height={300}
         />
