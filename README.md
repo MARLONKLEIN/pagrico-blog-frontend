@@ -539,4 +539,5 @@ API Version: 2024-01-01
 
 **🎛️ Sanity Studio Status**: FUNCIONAL e CUSTOMIZADO para as necessidades da PagRico  
 **🔗 Acesso**: http://localhost:3333 (após `npm run dev`)  
-**📊 Project ID**: 32ysp5d7 (production dataset)
+**📊 Project ID**: 32ysp5d7 (production dataset).
+
