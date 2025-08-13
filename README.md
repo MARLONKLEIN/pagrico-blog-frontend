@@ -47,19 +47,31 @@ npm run dev
 pagrico-blog-frontend/
 ├── app/
 │   ├── page.tsx               # 🏠 Página inicial com hero e posts destaque
-│   ├── layout.tsx             # 🎨 Layout global (header/footer)
-│   ├── globals.css            # 🎨 Estilos Tailwind + PagRico
+│   ├── layout.tsx             # 🎨 Layout global (header/footer) + fonts
+│   ├── globals.css            # 🎨 Estilos Tailwind + PagRico custom utilities
 │   └── blog/
 │       ├── page.tsx           # 📑 Lista de posts com filtros
 │       └── [slug]/
 │           └── page.tsx       # 📄 Páginas individuais dos posts
 ├── components/
+│   ├── Header.tsx             # 🧭 Navegação principal + logo S3
+│   ├── Footer.tsx             # 🔗 Links + informações da empresa
 │   ├── PostCard.tsx           # 🃏 Card de post otimizado
 │   └── PortableTextComponents.tsx # 📝 Renderização conteúdo rico
 ├── lib/
 │   └── sanity.ts              # 🔌 Cliente Sanity + queries GROQ
-├── .env.local                 # ⚙️ Configurações Sanity
-└── test-sanity.js            # 🧪 Script de teste da conexão
+├── .env.local                 # ⚙️ Configurações Sanity (project ID, dataset)
+├── .eslintrc.json             # 🧹 Configuração ESLint para Next.js 15
+├── .gitignore                 # 🚫 Arquivos ignorados pelo Git
+├── next.config.js             # ⚙️ Config Next.js (imagens S3, otimizações)
+├── next-env.d.ts              # 📝 Tipos TypeScript para Next.js
+├── package.json               # 📦 Dependências e scripts do projeto
+├── package-lock.json          # 🔒 Lock file das dependências
+├── postcss.config.js          # 🎨 Configuração PostCSS para Tailwind
+├── tailwind.config.js         # 🎨 Config Tailwind (cores PagRico, animações)
+├── test-sanity.js             # 🧪 Script de teste da conexão Sanity
+├── tsconfig.json              # 📝 Configuração TypeScript
+└── README.md                  # 📖 Documentação completa do projeto
 
 ```
 
