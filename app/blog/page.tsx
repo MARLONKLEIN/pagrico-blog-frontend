@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
-import { client, POSTS_QUERY, FEATURED_POSTS_QUERY } from '@/lib/sanity'
+import { getAllPosts, getFeaturedPosts } from '@/lib/sanity'
 import type { Post } from '@/lib/sanity'
-import PostCard, { FeaturedPostCard } from '@/components/PostCard'
+import PostCard from '@/components/PostCard'
 
 interface BlogPageProps {
   searchParams: { category?: string }
@@ -33,29 +33,19 @@ export const metadata: Metadata = {
   },
 }
 
-async function getPosts(): Promise<Post[]> {
-  return await client.fetch(POSTS_QUERY)
-}
-
-async function getFeaturedPosts(): Promise<Post[]> {
-  return await client.fetch(FEATURED_POSTS_QUERY)
-}
-
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const [posts, featuredPosts] = await Promise.all([
-    getPosts(),
+    getAllPosts(),
     getFeaturedPosts()
   ])
 
   const filteredPosts = searchParams.category 
     ? posts.filter(post => 
         post.categories?.some(cat => 
-          cat.slug.current === searchParams.category
+          cat.title.toLowerCase().includes(searchParams.category!.toLowerCase())
         )
       )
     : posts
-
-  const regularPosts = filteredPosts.filter(post => !post.featured)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -98,7 +88,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {featuredPosts.map((post) => (
-                <FeaturedPostCard key={post._id} post={post} />
+                <PostCard key={post._id} post={post} />
               ))}
             </div>
           </section>
