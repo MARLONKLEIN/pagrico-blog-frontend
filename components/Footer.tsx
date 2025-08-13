@@ -1,6 +1,7 @@
 // components/Footer.tsx
 
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -16,9 +17,11 @@ export default function Footer() {
               className="inline-block mb-6 transition-transform duration-150 ease-out hover:scale-105"
               title="PagRico - Página inicial"
             >
-              <img 
+              <Image 
                 src="https://s3.us-east-2.amazonaws.com/pagrico.com/assets/logo+branco+PagRico.svg" 
                 alt="PagRico" 
+                width={120}
+                height={32}
                 className="h-8 w-auto"
               />
             </Link>

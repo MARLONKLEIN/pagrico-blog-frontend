@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 's3.us-east-2.amazonaws.com',
+        port: '',
+        pathname: '/pagrico.com/assets/**',
+      },
     ],
   },
   // Otimizações para produção

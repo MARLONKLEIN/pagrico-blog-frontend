@@ -3,6 +3,7 @@
 import { getAllPosts } from '@/lib/sanity'
 import PostCard from '@/components/PostCard'
 import type { Post } from '@/lib/sanity'
+import Link from 'next/link'
 
 export default async function HomePage() {
   const posts: Post[] = await getAllPosts()
@@ -29,12 +30,12 @@ export default async function HomePage() {
               >
                 Ver Artigos
               </a>
-              <a
+              <Link
                 href="/"
                 className="px-8 py-3 border-2 border-pagrico-blue text-pagrico-blue font-semibold rounded-lg hover:bg-pagrico-blue hover:text-white transition-colors"
               >
                 ← Voltar ao Site
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -63,12 +64,12 @@ export default async function HomePage() {
               <p className="text-gray-600 mb-8">
                 Estamos preparando conteúdo incrível sobre pagamentos internacionais para você
               </p>
-              <a
+              <Link
                 href="/"
                 className="px-6 py-3 bg-pagrico-blue text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
               >
                 Explorar PagRico
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -91,18 +92,18 @@ export default async function HomePage() {
             recebe pagamentos internacionais
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/"
               className="px-8 py-3 bg-pagrico-green text-pagrico-blue font-bold rounded-lg hover:opacity-90 transition-opacity"
             >
               Conhecer PagRico
-            </a>
-            <a
+            </Link>
+            <Link
               href="/blog"
               className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-pagrico-blue transition-colors"
             >
               Ver Todos os Posts
-            </a>
+            </Link>
           </div>
         </div>
       </section>

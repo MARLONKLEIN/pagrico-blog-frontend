@@ -11,9 +11,6 @@ module.exports = {
         'pagrico-blue': '#00033D',
         'pagrico-green': '#00ffaa',
       },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-      },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
