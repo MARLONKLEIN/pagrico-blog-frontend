@@ -2,7 +2,7 @@
 
 import { getAllPosts } from '@/lib/sanity'
 import PostCard from '@/components/PostCard'
-import { Post } from '@/lib/types'
+import type { Post } from '@/lib/sanity'
 
 export default async function HomePage() {
   const posts: Post[] = await getAllPosts()

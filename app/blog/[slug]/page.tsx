@@ -9,12 +9,13 @@ import PostCard from '@/components/PostCard'
 import { PortableTextComponents } from '@/components/PortableTextComponents'
 
 interface PostPageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 // Gerar metadados dinâmicos para SEO
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
-  const post: Post = await client.fetch(POST_BY_SLUG_QUERY, { slug: params.slug })
+  const { slug } = await params
+  const post: Post = await client.fetch(POST_BY_SLUG_QUERY, { slug })
 
   if (!post) {
     return {
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   return {
     title: `${seoTitle} | Blog PagRico`,
     description,
-    keywords: [post.focusKeyword, ...(post.keywords || [])],
+    keywords: post.focusKeyword ? [post.focusKeyword, ...(post.keywords || [])] : (post.keywords || []),
     authors: [{ name: post.author?.name || 'PagRico' }],
     openGraph: {
       title: seoTitle,
@@ -76,7 +77,8 @@ async function getPost(slug: string): Promise<Post | null> {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getPost(params.slug)
+  const { slug } = await params
+  const post = await getPost(slug)
 
   if (!post) {
     notFound()
@@ -353,7 +355,7 @@ export default async function PostPage({ params }: PostPageProps) {
               '@type': 'WebPage',
               '@id': `https://pagrico.com/blog/${post.slug.current}`,
             },
-            keywords: [post.focusKeyword, ...(post.keywords || [])].join(', '),
+            keywords: (post.focusKeyword ? [post.focusKeyword, ...(post.keywords || [])] : (post.keywords || [])).join(', '),
           }),
         }}
       />

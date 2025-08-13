@@ -1,10 +1,11 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { getAllPosts, getFeaturedPosts } from '@/lib/sanity'
 import type { Post } from '@/lib/sanity'
 import PostCard from '@/components/PostCard'
 
 interface BlogPageProps {
-  searchParams: { category?: string }
+  searchParams: Promise<{ category?: string }>
 }
 
 export const metadata: Metadata = {
@@ -34,15 +35,16 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const resolvedSearchParams = await searchParams
   const [posts, featuredPosts] = await Promise.all([
     getAllPosts(),
     getFeaturedPosts()
   ])
 
-  const filteredPosts = searchParams.category 
+  const filteredPosts = resolvedSearchParams.category 
     ? posts.filter(post => 
         post.categories?.some(cat => 
-          cat.title.toLowerCase().includes(searchParams.category!.toLowerCase())
+          cat.title.toLowerCase().includes(resolvedSearchParams.category!.toLowerCase())
         )
       )
     : posts
@@ -64,9 +66,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             <nav className="mt-6" aria-label="Breadcrumb">
               <ol className="flex justify-center space-x-4 text-sm">
                 <li>
-                  <a href="/" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/" className="text-blue-600 hover:text-blue-800">
                     PagRico
-                  </a>
+                  </Link>
                 </li>
                 <li className="text-gray-500">/</li>
                 <li className="text-gray-900 font-medium">Blog</li>
@@ -78,7 +80,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Posts em Destaque */}
-        {!searchParams.category && featuredPosts.length > 0 && (
+        {!resolvedSearchParams.category && featuredPosts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-gray-900">
@@ -97,16 +99,16 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         {/* Filtros de Categoria */}
         <section className="mb-8">
           <div className="flex flex-wrap gap-3">
-            <a
+            <Link
               href="/blog"
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                !searchParams.category
+                !resolvedSearchParams.category
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               Todos os Posts
-            </a>
+            </Link>
             
             {/* Categorias principais da PagRico */}
             {[
@@ -120,7 +122,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 key={category.slug}
                 href={`/blog?category=${category.slug}`}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  searchParams.category === category.slug
+                  resolvedSearchParams.category === category.slug
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
@@ -133,10 +135,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
         {/* Grid de Posts */}
         <section>
-          {searchParams.category && (
+          {resolvedSearchParams.category && (
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900">
-                Posts sobre {searchParams.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                Posts sobre {resolvedSearchParams.category.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
               </h2>
               <p className="text-gray-600 mt-2">
                 {filteredPosts.length} {filteredPosts.length === 1 ? 'artigo encontrado' : 'artigos encontrados'}
@@ -151,17 +153,17 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 Nenhum post encontrado
               </h3>
               <p className="text-gray-600">
-                {searchParams.category 
+                {resolvedSearchParams.category 
                   ? 'Não há posts nesta categoria ainda.'
                   : 'Estamos preparando conteúdo incrível para você!'
                 }
               </p>
-              <a 
+              <Link 
                 href="/blog" 
                 className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Ver todos os posts
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
