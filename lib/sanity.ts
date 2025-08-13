@@ -195,3 +195,86 @@ export const FEATURED_POSTS_QUERY = `
     readingTime
   }
 `
+
+// Funções para buscar dados
+export async function getAllPosts(): Promise<Post[]> {
+  try {
+    const posts = await client.fetch(POSTS_QUERY)
+    return posts || []
+  } catch (error) {
+    console.error('Erro ao buscar posts:', error)
+    return []
+  }
+}
+
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  try {
+    const post = await client.fetch(POST_BY_SLUG_QUERY, { slug })
+    return post || null
+  } catch (error) {
+    console.error('Erro ao buscar post por slug:', error)
+    return null
+  }
+}
+
+export async function getFeaturedPosts(): Promise<Post[]> {
+  try {
+    const posts = await client.fetch(FEATURED_POSTS_QUERY)
+    return posts || []
+  } catch (error) {
+    console.error('Erro ao buscar posts em destaque:', error)
+    return []
+  }
+}
+
+export async function getAllPostSlugs(): Promise<{ slug: { current: string } }[]> {
+  try {
+    const slugs = await client.fetch(POST_SLUGS_QUERY)
+    return slugs || []
+  } catch (error) {
+    console.error('Erro ao buscar slugs dos posts:', error)
+    return []
+  }
+}
+
+export async function getPostsByCategory(categorySlug: string): Promise<Post[]> {
+  try {
+    const query = `
+      *[_type == "post" && status == "published" && $categorySlug in categories[]->slug.current] | order(publishedAt desc) {
+        _id,
+        title,
+        slug,
+        excerpt,
+        mainImage {
+          asset,
+          alt,
+          caption
+        },
+        author-> {
+          name,
+          role,
+          image {
+            asset,
+            alt
+          }
+        },
+        categories[]-> {
+          title,
+          slug,
+          color,
+          icon
+        },
+        publishedAt,
+        readingTime,
+        featured,
+        metaDescription,
+        focusKeyword
+      }
+    `
+    const posts = await client.fetch(query, { categorySlug })
+    return posts || []
+  } catch (error) {
+    console.error('Erro ao buscar posts por categoria:', error)
+    return []
+  }
+}
