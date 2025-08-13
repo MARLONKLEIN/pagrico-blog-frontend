@@ -50,97 +50,104 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     : posts
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header do Blog */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <header className="pt-24 pb-16 bg-gradient-to-br from-white to-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#00033D] to-[#1a0d5c] rounded-2xl mb-6">
+              <span className="text-white font-bold text-2xl">📖</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-[#00033D] mb-4">
               Blog PagRico
             </h1>
-            <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-600 mb-6 max-w-2xl mx-auto">
               Insights sobre pagamentos internacionais, fintech e o futuro do dinheiro digital
             </p>
             
             {/* Breadcrumb */}
-            <nav className="mt-6" aria-label="Breadcrumb">
-              <ol className="flex justify-center space-x-4 text-sm">
+            <nav className="mb-8" aria-label="Breadcrumb">
+              <ol className="flex justify-center items-center space-x-2 text-sm">
                 <li>
-                  <Link href="/" className="text-blue-600 hover:text-blue-800">
+                  <Link href="/" className="text-[#00033D] hover:text-[#00033D]/80 font-medium">
                     PagRico
                   </Link>
                 </li>
-                <li className="text-gray-500">/</li>
-                <li className="text-gray-900 font-medium">Blog</li>
+                <li className="text-slate-400">/</li>
+                <li className="text-slate-700 font-medium">Blog</li>
               </ol>
             </nav>
+
+            {/* Filtros de Categoria */}
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link
+                href="/blog"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  !resolvedSearchParams.category
+                    ? 'bg-[#00033D] text-white shadow-md'
+                    : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
+                }`}
+              >
+                Todos os Posts
+              </Link>
+              
+              {/* Categorias principais da PagRico */}
+              {[
+                { slug: 'pagamentos-internacionais', title: 'Pagamentos Internacionais', icon: '🌐' },
+                { slug: 'stablecoins', title: 'Stablecoins', icon: '🪙' },
+                { slug: 'pix-internacional', title: 'PIX Internacional', icon: '⚡' },
+                { slug: 'cripto-para-empresas', title: 'Cripto B2B', icon: '🏢' },
+                { slug: 'drex-e-real-digital', title: 'Drex & Real Digital', icon: '🏦' },
+              ].map((category) => (
+                <Link
+                  key={category.slug}
+                  href={`/blog?category=${category.slug}`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    resolvedSearchParams.category === category.slug
+                      ? 'bg-[#00033D] text-white shadow-md'
+                      : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
+                  }`}
+                >
+                  <span className="mr-1">{category.icon}</span>
+                  {category.title}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Posts em Destaque */}
         {!resolvedSearchParams.category && featuredPosts.length > 0 && (
           <section className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">
-                📌 Posts em Destaque
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-[#00033D] mb-4">
+                ⭐ Posts em Destaque
               </h2>
+              <p className="text-slate-600 max-w-2xl mx-auto">
+                Conteúdo selecionado especialmente para você ficar por dentro das principais tendências
+              </p>
             </div>
             
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {featuredPosts.map((post) => (
-                <PostCard key={post._id} post={post} />
+                <PostCard key={post._id} post={post} variant="featured" />
               ))}
             </div>
           </section>
         )}
 
-        {/* Filtros de Categoria */}
-        <section className="mb-8">
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/blog"
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                !resolvedSearchParams.category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Todos os Posts
-            </Link>
-            
-            {/* Categorias principais da PagRico */}
-            {[
-              { slug: 'pagamentos-internacionais', title: '🌐 Pagamentos Internacionais' },
-              { slug: 'stablecoins', title: '🪙 Stablecoins' },
-              { slug: 'pix-internacional', title: '⚡ PIX Internacional' },
-              { slug: 'cripto-para-empresas', title: '🏢 Cripto B2B' },
-              { slug: 'drex-e-real-digital', title: '🏦 Drex & Real Digital' },
-            ].map((category) => (
-              <a
-                key={category.slug}
-                href={`/blog?category=${category.slug}`}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  resolvedSearchParams.category === category.slug
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {category.title}
-              </a>
-            ))}
-          </div>
-        </section>
-
+        {/* Filtros Móveis - Removidos da seção principal */}
+        
         {/* Grid de Posts */}
         <section>
           {resolvedSearchParams.category && (
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-[#00033D] mb-4">
                 Posts sobre {resolvedSearchParams.category.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
               </h2>
-              <p className="text-gray-600 mt-2">
+              <p className="text-slate-600">
                 {filteredPosts.length} {filteredPosts.length === 1 ? 'artigo encontrado' : 'artigos encontrados'}
               </p>
             </div>
@@ -148,50 +155,67 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
           {filteredPosts.length === 0 ? (
             <div className="text-center py-16">
-              <div className="text-6xl mb-4">📝</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-slate-100 rounded-2xl mb-6">
+                <span className="text-3xl">📝</span>
+              </div>
+              <h3 className="text-2xl font-bold text-[#00033D] mb-4">
                 Nenhum post encontrado
               </h3>
-              <p className="text-gray-600">
+              <p className="text-slate-600 mb-8 max-w-md mx-auto">
                 {resolvedSearchParams.category 
-                  ? 'Não há posts nesta categoria ainda.'
+                  ? 'Não há posts nesta categoria ainda. Estamos trabalhando em novo conteúdo!'
                   : 'Estamos preparando conteúdo incrível para você!'
                 }
               </p>
               <Link 
                 href="/blog" 
-                className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#00033D] text-white font-semibold rounded-lg hover:bg-[#00033D]/90 transition-all duration-300 hover:-translate-y-0.5"
               >
                 Ver todos os posts
               </Link>
             </div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {filteredPosts.map((post) => (
-                <PostCard key={post._id} post={post} />
-              ))}
-            </div>
+            <>
+              {!resolvedSearchParams.category && (
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl font-bold text-[#00033D] mb-4">
+                    Todos os Artigos
+                  </h2>
+                  <p className="text-slate-600 max-w-2xl mx-auto">
+                    Explore nosso acervo completo de insights sobre pagamentos internacionais e fintech
+                  </p>
+                </div>
+              )}
+              
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {filteredPosts.map((post) => (
+                  <PostCard key={post._id} post={post} />
+                ))}
+              </div>
+            </>
           )}
         </section>
 
         {/* CTA de Newsletter */}
-        <section className="mt-20 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">
-            📬 Receba insights exclusivos
-          </h2>
-          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            Fique por dentro das últimas tendências em pagamentos internacionais e fintech. 
-            Enviamos apenas conteúdo de alta qualidade, sem spam.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Seu melhor e-mail"
-              className="flex-1 px-4 py-3 rounded-lg focus:ring-2 focus:ring-white focus:outline-none"
-            />
-            <button className="px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-              Inscrever-se
-            </button>
+        <section className="mt-20 bg-gradient-to-r from-[#00033D] to-[#1a0d5c] rounded-2xl p-8 text-center shadow-xl">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              📬 Receba insights exclusivos
+            </h2>
+            <p className="text-blue-100 mb-8 leading-relaxed">
+              Fique por dentro das últimas tendências em pagamentos internacionais e fintech. 
+              Enviamos apenas conteúdo de alta qualidade, sem spam.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Seu melhor e-mail"
+                className="flex-1 px-4 py-3 rounded-lg focus:ring-2 focus:ring-[#00ffaa] focus:outline-none"
+              />
+              <button className="px-6 py-3 bg-[#00ffaa] text-[#00033D] rounded-lg font-bold hover:bg-[#00ffaa]/90 transition-all duration-300 hover:-translate-y-0.5">
+                Inscrever-se
+              </button>
+            </div>
           </div>
         </section>
       </main>

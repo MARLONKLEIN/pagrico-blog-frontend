@@ -5,15 +5,59 @@
 /* Fontes */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* Variáveis CSS globais */
+/* Variáveis CSS PagRico */
 :root {
   --pagrico-blue: #00033D;
   --pagrico-green: #00ffaa;
+  --pagrico-blue-light: #1a0d5c;
 }
 
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Classes utilitárias PagRico */
+@layer utilities {
+  .text-pagrico-blue {
+    color: var(--pagrico-blue);
+  }
+  
+  .bg-pagrico-blue {
+    background-color: var(--pagrico-blue);
+  }
+  
+  .text-pagrico-green {
+    color: var(--pagrico-green);
+  }
+  
+  .bg-pagrico-green {
+    background-color: var(--pagrico-green);
+  }
+  
+  .border-pagrico-blue {
+    border-color: var(--pagrico-blue);
+  }
+  
+  .border-pagrico-green {
+    border-color: var(--pagrico-green);
+  }
+  
+  .gradient-pagrico {
+    background: linear-gradient(135deg, var(--pagrico-blue) 0%, var(--pagrico-blue-light) 100%);
+  }
+}
+
+/* Reset e customizações */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* Customizações para o conteúdo do blog */
