@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PagRico - Integração do Blog (Exemplo Prático)</title>
+    <meta name="description" content="Exemplo prático de como integrar o blog PagRico no site principal">
+    
+    <!-- Fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #00033D 0%, #1a0d5c 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        
+        .hero .cta {
+            display: inline-block;
+            background: #00ffaa;
+            color: #00033D;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .hero .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 170, 0.3);
+        }
+        
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #00033D;
+            margin-bottom: 16px;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.125rem;
+            color: #64748b;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .code-example {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .integration-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .method-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .method-card h3 {
+            color: #00033D;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .method-card .badge {
+            display: inline-block;
+            background: #00ffaa;
+            color: #00033D;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .method-card p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        
+        .method-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .method-card li {
+            color: #64748b;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .method-card li:before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+        }
+        
+        .demo-controls {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .demo-button {
+            display: inline-block;
+            background: #00033D;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            margin: 0 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-button:hover {
+            background: #00ffaa;
+            color: #00033D;
+        }
+        
+        .demo-button.active {
+            background: #00ffaa;
+            color: #00033D;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .integration-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>🚀 PagRico Blog Integration</h1>
+            <p>Integre facilmente os artigos do blog PagRico no seu site principal com nossa API robusta e flexível</p>
+            <a href="#demo" class="cta">Ver Demo Interativa</a>
+        </div>
+    </section>
+
+    <!-- Como Funciona -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Como Funciona</h2>
+            <p class="section-subtitle">
+                Nossa solução consome diretamente a API do Sanity, oferecendo máxima flexibilidade 
+                e performance para exibir os artigos do blog em qualquer página do site principal.
+            </p>
+            
+            <div class="integration-methods">
+                <div class="method-card">
+                    <span class="badge">Mais Simples</span>
+                    <h3>📦 Script Plug-and-Play</h3>
+                    <p>Solução mais fácil: apenas 2 linhas de código para ter o blog funcionando.</p>
+                    <ul>
+                        <li>Zero configuração necessária</li>
+                        <li>Estilos incluídos automaticamente</li>
+                        <li>Funciona em qualquer site HTML</li>
+                        <li>Carregamento assíncrono otimizado</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <span class="badge">Recomendado</span>
+                    <h3>🎯 API Direta JavaScript</h3>
+                    <p>Controle total sobre como e onde exibir os artigos com nossa API JavaScript.</p>
+                    <ul>
+                        <li>Flexibilidade total de layout</li>
+                        <li>Filtros por categoria</li>
+                        <li>Posts em destaque</li>
+                        <li>Cache inteligente</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <span class="badge">Avançado</span>
+                    <h3>🔧 Cliente Sanity Customizado</h3>
+                    <p>Para sites React/Next.js que precisam de integração mais profunda.</p>
+                    <ul>
+                        <li>TypeScript nativo</li>
+                        <li>Server-Side Rendering</li>
+                        <li>Queries GROQ customizadas</li>
+                        <li>Real-time updates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exemplos de Código -->
+    <section class="section" style="background: white;">
+        <div class="container">
+            <h2 class="section-title">Implementação Rápida</h2>
+            
+            <h3 style="color: #00033D; margin-bottom: 16px;">🚀 Opção 1: Script Simples (2 linhas)</h3>
+            <div class="code-example">
+&lt;!-- Incluir o script --&gt;
+&lt;script src="https://blog.pagrico.com/pagrico-blog-integration.js"&gt;&lt;/script&gt;
+
+&lt;!-- Container onde o blog será exibido --&gt;
+&lt;div id="pagrico-blog"&gt;&lt;/div&gt;
+
+&lt;!-- Inicializar o blog --&gt;
+&lt;script&gt;
+  PagRicoBlog.renderSection('pagrico-blog', {
+    limit: 3,           // Mostrar 3 artigos
+    featured: true,     // Apenas posts em destaque
+    showHeader: true,   // Mostrar título da seção
+    showCTA: true      // Mostrar botão "Ver mais"
+  })
+&lt;/script&gt;</div>
+
+            <h3 style="color: #00033D; margin: 40px 0 16px;">⚡ Opção 2: JavaScript Puro</h3>
+            <div class="code-example">
+// Buscar posts e processar como quiser
+PagRicoBlog.getPosts({ limit: 5 })
+  .then(posts => {
+    console.log('Posts carregados:', posts)
+    
+    // Criar HTML customizado
+    const html = posts.map(post => `
+      &lt;article&gt;
+        &lt;h3&gt;${post.title}&lt;/h3&gt;
+        &lt;p&gt;${post.excerpt}&lt;/p&gt;
+        &lt;a href="https://blog.pagrico.com/blog/${post.slug.current}"&gt;
+          Ler mais
+        &lt;/a&gt;
+      &lt;/article&gt;
+    `).join('')
+    
+    document.getElementById('meus-posts').innerHTML = html
+  })
+  .catch(error => console.error('Erro:', error))</div>
+
+            <h3 style="color: #00033D; margin: 40px 0 16px;">🎯 Opção 3: Por Categoria</h3>
+            <div class="code-example">
+// Mostrar apenas posts sobre stablecoins
+PagRicoBlog.renderSection('stablecoins-section', {
+  category: 'stablecoins',
+  limit: 2,
+  title: '🪙 Stablecoins & Cripto',
+  subtitle: 'Tudo sobre moedas digitais estáveis'
+})
+
+// Mostrar posts sobre PIX Internacional  
+PagRicoBlog.renderSection('pix-section', {
+  category: 'pix-internacional', 
+  limit: 3,
+  title: '⚡ PIX Internacional',
+  subtitle: 'Novidades sobre pagamentos instantâneos globais'
+})</div>
+        </div>
+    </section>
+
+    <!-- Demo Interativa -->
+    <section id="demo" class="section" style="background: #f8fafc;">
+        <div class="container">
+            <h2 class="section-title">🎮 Demo Interativa</h2>
+            <p class="section-subtitle">
+                Teste diferentes configurações e veja o resultado em tempo real
+            </p>
+            
+            <!-- Controles da Demo -->
+            <div class="demo-controls">
+                <button class="demo-button active" onclick="loadDemo('featured')">
+                    ⭐ Posts em Destaque
+                </button>
+                <button class="demo-button" onclick="loadDemo('recent')">
+                    🆕 Posts Recentes
+                </button>
+                <button class="demo-button" onclick="loadDemo('stablecoins')">
+                    🪙 Stablecoins
+                </button>
+                <button class="demo-button" onclick="loadDemo('pix')">
+                    ⚡ PIX Internacional
+                </button>
+            </div>
+            
+            <!-- Container da Demo -->
+            <div id="demo-container" style="min-height: 400px;">
+                <!-- O conteúdo será carregado aqui -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Próximos Passos -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">🚀 Próximos Passos</h2>
+            
+            <div class="integration-methods">
+                <div class="method-card">
+                    <h3>1. 📥 Download do Script</h3>
+                    <p>Faça o download do arquivo de integração para usar no seu site:</p>
+                    <a href="https://blog.pagrico.com/pagrico-blog-integration.js" 
+                       class="demo-button" target="_blank" rel="noopener noreferrer">
+                        Download pagrico-blog-integration.js
+                    </a>
+                </div>
+                
+                <div class="method-card">
+                    <h3>2. 🔧 Implementar no Site</h3>
+                    <p>Adicione o script na página onde quer exibir o blog:</p>
+                    <ul>
+                        <li>Incluir o script antes do &lt;/body&gt;</li>
+                        <li>Criar um div com ID único</li>
+                        <li>Chamar PagRicoBlog.renderSection()</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <h3>3. 🎨 Personalizar Visual</h3>
+                    <p>Ajuste os estilos para combinar com o seu site:</p>
+                    <ul>
+                        <li>CSS customizado incluído</li>
+                        <li>Cores da PagRico pré-configuradas</li>
+                        <li>Layout responsivo automático</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="section" style="background: linear-gradient(135deg, #00033D 0%, #1a0d5c 100%); color: white;">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: white; margin-bottom: 16px;">
+                📞 Precisa de Ajuda?
+            </h2>
+            <p style="font-size: 1.125rem; margin-bottom: 32px; opacity: 0.9;">
+                Nossa equipe técnica está pronta para ajudar na integração
+            </p>
+            <a href="mailto:tech@pagrico.com" class="cta">
+                Falar com Nossa Equipe
+            </a>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://blog.pagrico.com/pagrico-blog-integration.js"></script>
+    <script>
+        // Função para carregar diferentes demos
+        function loadDemo(type) {
+            // Atualizar botões ativos
+            document.querySelectorAll('.demo-button').forEach(btn => {
+                btn.classList.remove('active')
+            })
+            event.target.classList.add('active')
+            
+            // Configurações para cada demo
+            const configs = {
+                featured: {
+                    featured: true,
+                    limit: 3,
+                    title: '⭐ Posts em Destaque',
+                    subtitle: 'Conteúdo selecionado especialmente para você'
+                },
+                recent: {
+                    featured: false,
+                    limit: 6,
+                    title: '🆕 Posts Recentes',
+                    subtitle: 'Últimas publicações do blog PagRico'
+                },
+                stablecoins: {
+                    category: 'stablecoins',
+                    limit: 4,
+                    title: '🪙 Stablecoins',
+                    subtitle: 'Tudo sobre moedas digitais estáveis'
+                },
+                pix: {
+                    category: 'pix-internacional',
+                    limit: 4,
+                    title: '⚡ PIX Internacional',
+                    subtitle: 'Pagamentos instantâneos globais'
+                }
+            }
+            
+            // Carregar demo
+            PagRicoBlog.renderSection('demo-container', configs[type])
+        }
+        
+        // Carregar demo inicial quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDemo('featured')
+        })
+    </script>
+</body>
+</html>
